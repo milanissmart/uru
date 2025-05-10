@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login/Signup</title>
+<link rel="stylesheet" href="login.css" />
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+    background-color: #282c34;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .particle {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0.8;
+    animation: float 5s ease-out infinite, fade 5s ease-out infinite;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--endX), var(--endY)) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<div id="particles-js"></div>
+
+<body>
+  <center><strong><h1>Made by Niam and Nooh, a magnifecent partership!</h1></strong></center>
+
+  <div class="container">
+    <h2>Login/Signup Page</h2>
+
+    <!-- Login Form Section -->
+    <div class="form-section active" id="login-section">
+      <h3>Login</h3>
+      <form id="login-form">
+        <div class="input_container">
+          <input class="input-field" type="email" id="login-email" placeholder=" " required>
+          <label class="input-label">Email</label>
+        </div>
+        <div class="input_container">
+          <input class="input-field" type="password" id="login-password" placeholder=" " required>
+          <label class="input-label">Password</label>
+        </div>
+        <button type="button" id="button" class="button" onclick="logIn()">Login</button>
+      </form>
+      <p class="toggle-button" onclick="toggleForm('signup')">Don't have an account? Sign up</p>
+    </div>
+
+    <!-- Signup Form Section -->
+    <div class="form-section" id="signup-section">
+      <h3>Sign Up</h3>
+      <form id="signup-form">
+        <div class="input_container">
+          <input class="input-field" type="email" id="signup-email" placeholder=" " required>
+          <label class="input-label">Email</label>
+        </div>
+        <div class="input_container">
+          <input class="input-field" type="password" id="signup-password" placeholder=" " required>
+          <label class="input-label">Password</label>
+        </div>
+        <button type="button" onclick="signUp()">Sign Up</button>
+      </form>
+      <p class="toggle-button" onclick="toggleForm('login')">Already have an account? Login</p>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div class="form-section" id="dashboard-section">
+      <h3>Welcome to your Dashboard!</h3>
+      <p id="status"></p>
+      <button onclick="logOut()">Log Out</button>
+    </div>
+  </div>
+
+  <!-- Firebase Authentication --> <script type="module"> import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js"; import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js"; const firebaseConfig = { apiKey: "AIzaSyBUzFEvfY0KBAdUZ6afw_j4ygn8mFmtFn8", authDomain: "signup-dfe16.firebaseapp.com", projectId: "signup-dfe16", storageBucket: "signup-dfe16.firebasestorage.app", messagingSenderId: "621262502098", appId: "1:621262502098:web:ce2ece623422c59474150b", measurementId: "G-XJVCTJ4BXH" }; const app = initializeApp(firebaseConfig); const auth = getAuth(app); window.signUp = function () { const email = document.getElementById('signup-email').value; const password = document.getElementById('signup-password').value; createUserWithEmailAndPassword(auth, email, password) .then(() => { alert("Signed up successfully!"); toggleForm('login'); }) .catch(error => alert(error.message)); }; window.logIn = function () {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      // After successful login, redirect to a new URL
+      window.location.href = "https://canvas-login-instructure.github.io/macvg/game.html"; // Replace with the URL you want to use
+    })
+    .catch(error => alert(error.message));
+};
+ window.logOut = function () { signOut(auth) .then(() => { document.getElementById('dashboard-section').classList.remove('active'); document.getElementById('login-section').classList.add('active'); }) .catch(error => alert(error.message)); }; window.toggleForm = function (formType) { document.getElementById('login-section').classList.toggle('active', formType === 'login'); document.getElementById('signup-section').classList.toggle('active', formType === 'signup'); }; </script>
+<script src="script.js"></script>
+
+<script>
+  const emojis = ['🎮', '🕹️', ];
+  const numberOfParticles = 100;
+
+  function createParticle() {
+    const particle = document.createElement('div');
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    particle.textContent = emoji;
+    particle.classList.add('particle');
+
+    const randomX = Math.random() * window.innerWidth;
+    const randomY = Math.random() * window.innerHeight;
+    const size = Math.random() * 15 + 10; // Random size between 10px and 25px
+    const speed = Math.random() * 3 + 2; // Random speed between 2s and 5s
+    const endX = Math.random() * 600 - 300; // Random horizontal movement
+    const endY = Math.random() * -600 - 200; // Random upward movement
+
+    particle.style.left = `${randomX}px`;
+    particle.style.top = `${randomY}px`;
+    particle.style.fontSize = `${size}px`;
+    particle.style.setProperty('--endX', `${endX}px`);
+    particle.style.setProperty('--endY', `${endY}px`);
+    particle.style.animationDuration = `${speed}s`;
+
+    document.body.appendChild(particle);
+
+    // Remove the particle after animation ends
+    particle.addEventListener('animationend', () => {
+      particle.remove();
+    });
+  }
+
+  // Create particles periodically
+  setInterval(createParticle, 100);
+
+  // Initial particle creation
+  for (let i = 0; i < numberOfParticles; i++) {
+    createParticle();
+  }
+</script>
+</body>
+</html>
